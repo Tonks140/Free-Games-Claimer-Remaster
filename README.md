@@ -21,6 +21,7 @@ Automatically claims free games on:
 - <img alt="logo legacy-games" src="https://www.google.com/s2/favicons?domain=legacygames.com&sz=64" width="20" align="middle" /> **Legacy Games** – redeems the Legacy Games codes Prime Gaming hands out into your Legacy Games account before they expire, with the newsletter left unticked
 - <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/ubisoft/ffffff" /><img alt="logo ubisoft" src="https://cdn.simpleicons.org/ubisoft/000000" width="20" align="middle" /></picture> **Ubisoft** – free game giveaways from [ubisoft.com/games/free](https://www.ubisoft.com/en-us/games/free) (giveaways only, never trials, demos or free weekends)
 - <img alt="logo aliexpress" src="https://www.google.com/s2/favicons?domain=aliexpress.com&sz=32" width="20" align="middle" /> **AliExpress** – automated daily check-in that collects coins, using a real-device mobile fingerprint to stay undetected and reading the balance from the coin API. Accounts that live on a country site (for example it.aliexpress.com) are recognised automatically. The coin page often arrives empty; the bot walks back to it up to `AE_PAGE_RETRIES` times (four by default), then reports it and moves on (see [Troubleshooting](#troubleshooting))
+- <img alt="logo microsoft rewards" src="https://www.google.com/s2/favicons?domain=rewards.bing.com&sz=32" width="20" align="middle" /> **Microsoft Rewards** – opt-in, add `msrewards` to `STORES`. Works through the dashboard activities (daily set, more activities, punch cards) and then the Bing searches the dashboard says are left, all in the browser with curved mouse paths, wheel scrolling, typed searches and varying pauses (`MSR_PACE`, `MSR_SEARCH_LIMIT`). It signs in with your `MS_` account and shares the Microsoft Store profile. Mobile searches are not done. **Microsoft forbids automating Rewards and can suspend the account, voiding its points: use it at your own risk.**
 
 **GamerPower API**, asked once at the start of every run, finds giveaways the stores themselves do not advertise, then hands each one to the matching store above. It also reaches these sites, which have no store module of their own and are chosen in `STORES` like any other store:
 - <img alt="logo fanatical" src="https://www.fanatical.com/favicon.ico" width="20" align="middle" /> **Fanatical** – free games, claimed through Fanatical's free checkout and confirmed in your Fanatical orders; the Steam key is then activated on your Steam account when `steam` is in `STORES` (add `fanatical` to `STORES`, see the warning below)
@@ -174,6 +175,8 @@ Options are set via environment variables in `.env`:
 | `MS_FORCE_REDEEM` | `false` | Force another pass over Microsoft codes from the last 60 days. |
 | `MS_CLAIM_DLC` | `true` | Also claim the DLC giveaways GamerPower finds for Xbox. Only DLC GamerPower gives a price for count, so codes for items inside a game stay out. |
 | `MS_OTP_KEY` | | Microsoft authenticator (TOTP) secret, auto-filled. E-mail codes and passkeys are done by you over VNC. |
+| `MSR_SEARCH_LIMIT` | `50` | The most Bing searches one Microsoft Rewards run makes. The dashboard's own counter says how many earn points, so a run usually does fewer. `0` skips the searches. |
+| `MSR_PACE` | `100` | How fast Microsoft Rewards works, in percent. `100` is a normal human pace, `200` takes twice as long. A run takes roughly 15 to 30 minutes at `100`. |
 | `STEAM_USERNAME` | | Steam username. |
 | `STEAM_PASSWORD` | | Steam password. |
 | `STEAM_CLAIM_DLC` | `true` | Also claim Steam DLC at 100% off, from GamerPower and from Steam's own search. A DLC whose base game you don't own is reported once, not every run. `false` keeps Steam to full games. |
@@ -191,7 +194,7 @@ Options are set via environment variables in `.env`:
 | `AE_FLAG_RETRIES` | `3` | How many times to wait and re-approach the coin page when the offer is capped. |
 | `AE_FLAG_WAIT` | `480` | Seconds to wait between retries (kept above AliExpress' ~7-min penalty so one wait clears it). |
 | `AE_PAGE_RETRIES` | `4` | How many extra approaches to make when the coin page loads but renders nothing. AliExpress serves it empty most of the time (measured: one usable page in eight looks), so each retry is a real chance at the daily check-in. `0` gives up on the first look. |
-| `STORES` | *(see note)* | Comma-separated list of stores to run. Empty runs `steam`, `epic`, `prime`, `gog`, `microsoft`, `ubisoft`, `aliexpress` and `legacy`. Add `fab`, `unity`, `itchio`, `fanatical`, `indiegala` or `alienware` to switch one on. GamerPower is asked once per run and its finds go to the store they belong to, so `steam` also claims the Steam giveaways it lists. |
+| `STORES` | *(see note)* | Comma-separated list of stores to run. Empty runs `steam`, `epic`, `prime`, `gog`, `microsoft`, `ubisoft`, `aliexpress` and `legacy`. Add `fab`, `unity`, `msrewards`, `itchio`, `fanatical`, `indiegala` or `alienware` to switch one on. GamerPower is asked once per run and its finds go to the store they belong to, so `steam` also claims the Steam giveaways it lists. |
 | `RESET_DB_GAMES` | `false` | Erase the database claims recorded within the last 7 days, at every start while it is on, to clear false positives. Codes and keys still waiting to be redeemed are kept. Set it back to `false` after one start. |
 | `FANATICAL_EMAIL` | | Fanatical account email. |
 | `FANATICAL_PASSWORD`| | Fanatical account password. |
@@ -407,6 +410,7 @@ free-games-claimer-remaster/
 │       ├── unity.py        # Unity Asset Store weekly free asset
 │       ├── ubisoft.py      # Ubisoft giveaways (ubisoft.com/games/free)
 │       ├── microsoft.py    # Microsoft Store: Prime codes and paid games while free
+│       ├── msrewards.py    # Microsoft Rewards: daily activities and Bing searches (opt-in)
 │       ├── legacygames.py  # Legacy Games: redeeming the codes from Prime
 │       ├── aliexpress.py   # AliExpress check-in & coin collecting
 │       ├── epic_mobile.py  # Epic's weekly free Android/iOS game (detection only)

@@ -329,6 +329,12 @@ class Config:
     # DLC giveaways GamerPower finds for Xbox.
     ms_claim_dlc: bool = _bool("MS_CLAIM_DLC", default=True)
 
+    # --- Microsoft Rewards (signs in with the MS_ account above) ---
+    # The most Bing searches one run makes. The dashboard's own counter decides how many are worth doing.
+    msr_search_limit: int = _int("MSR_SEARCH_LIMIT", 50)
+    # How fast it works, in percent: 100 is the normal human pace, 200 takes twice as long.
+    msr_pace: int = _int("MSR_PACE", 100)
+
     # --- Steam ---
     steam_username: str | None = os.getenv("STEAM_USERNAME")
     steam_password: str | None = os.getenv("STEAM_PASSWORD") or os.getenv("PASSWORD")

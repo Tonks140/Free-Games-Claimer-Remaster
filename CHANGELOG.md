@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html): every release raises the number after the dot (1.10, 1.11), and a development build carries the same number with a `d` suffix (`v1.11d`). The version being worked on stays at the top without a date until it is released.
 
+## [1.19]
+
+### Added
+- **Microsoft Rewards (opt-in)** – `src/stores/msrewards.py` collects the day's points through the browser: the Rewards dashboard's daily set, more activities and punch cards, then the Bing searches the dashboard's own counter says are left. Clicks follow curved mouse paths, scrolling uses the wheel, searches are typed key by key with the odd slip taken back, and waits vary from step to step; `MSR_PACE` slows everything down or speeds it up and `MSR_SEARCH_LIMIT` caps the searches. It signs in with `MS_EMAIL`, `MS_PASSWORD` and `MS_OTP_KEY` and shares the Microsoft Store's browser profile, runs only when `STORES` names `msrewards`, keeps one record per day so Chrome opens only while something is left, and honours `DRYRUN`. Mobile searches are not done. Microsoft's rules forbid automating Rewards, so an account can be suspended for it.
+
 ## [1.18] - 2026-10-21
 
 ### Changed
@@ -463,6 +468,7 @@ Steam no longer reads SteamDB: free Steam games now come from GamerPower and Ste
 - ❌ `unrealengine.js` – Out of scope
 - ❌ `steam-games.js` – Only scraped profiles, never claimed games
 
+[1.19]: https://github.com/P-Adamiec/Free-Games-Claimer-Remaster/compare/v1.18...dev
 [1.18]: https://github.com/P-Adamiec/Free-Games-Claimer-Remaster/compare/v1.17...v1.18
 [1.17]: https://github.com/P-Adamiec/Free-Games-Claimer-Remaster/compare/v1.16...v1.17
 [1.16]: https://github.com/P-Adamiec/Free-Games-Claimer-Remaster/compare/v1.15...v1.16

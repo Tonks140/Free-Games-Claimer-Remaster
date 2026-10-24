@@ -39,6 +39,7 @@ from src.stores.epic_fab import claim_fab
 from src.stores.gamerpower import SIDE_STORE_KEYS, claim_side_stores, discover_giveaways
 from src.stores.gog import claim_gog
 from src.stores.microsoft import claim_microsoft
+from src.stores.msrewards import claim_msrewards
 from src.stores.prime import claim_prime
 from src.stores.steam import claim_steam
 from src.stores.unity import claim_unity
@@ -59,8 +60,8 @@ class StorePrefixFilter(logging.Filter):
     def filter(self, record):
         if record.name.startswith("fgc."):
             store = record.name.split(".")[-1]
-            if store in ("epic", "steam", "gog", "prime", "microsoft", "aliexpress", "ubisoft", "fab", "unity", "legacygames"):
-                store_map = {"gog": "GOG", "epic": "Epic", "steam": "Steam", "prime": "Prime", "microsoft": "Microsoft", "aliexpress": "AliExpress", "ubisoft": "Ubisoft", "fab": "Fab", "unity": "Unity", "legacygames": "Legacy Games"}
+            if store in ("epic", "steam", "gog", "prime", "microsoft", "msrewards", "aliexpress", "ubisoft", "fab", "unity", "legacygames"):
+                store_map = {"gog": "GOG", "epic": "Epic", "steam": "Steam", "prime": "Prime", "microsoft": "Microsoft", "msrewards": "MS Rewards", "aliexpress": "AliExpress", "ubisoft": "Ubisoft", "fab": "Fab", "unity": "Unity", "legacygames": "Legacy Games"}
                 prefix = escape(f"[{store_map[store]}]")
                 # Prepend to the message template
                 record.msg = f"{prefix} {record.msg}"
@@ -126,6 +127,7 @@ ALL_CLAIMERS: dict[str, tuple[str, object]] = {
     "prime":      ("Prime Gaming", claim_prime),
     "gog":        ("GOG",          claim_gog),
     "microsoft":  ("Microsoft",    claim_microsoft),
+    "msrewards":  ("MS Rewards",   claim_msrewards),
     "ubisoft":    ("Ubisoft",      claim_ubisoft),
     "unity":      ("Unity",        claim_unity),
     "aliexpress": ("AliExpress",   claim_aliexpress),
@@ -178,6 +180,10 @@ _ALIASES: dict[str, str] = {
     "microsoft-store": "microsoft",
     "ms":            "microsoft",
     "xbox":          "microsoft",
+    "msrewards":     "msrewards",
+    "ms-rewards":    "msrewards",
+    "rewards":       "msrewards",
+    "microsoft-rewards": "msrewards",
     "ubisoft":       "ubisoft",
     "ubi":           "ubisoft",
     "unity":         "unity",
